@@ -62,6 +62,12 @@ Quickstart:
 python get_pulse.py
 ```
 
+- To send pulse rate over serial, run the following after replacing ```COMX``` with your system's serial port. It defaults to 9600 baud.
+
+```
+python get_pulse.py --serial COMX
+```
+
 - To run on an IP camera, set the `url`, `user`, and `password` strings on line 134 of `get_pulse_ipcam.py`, then run:
 
 ```
