@@ -6,6 +6,7 @@ import argparse
 import numpy as np
 import datetime
 from serial import Serial
+import struct
 import socket
 import sys
 
@@ -189,7 +190,7 @@ class getPulseApp(object):
             self.make_bpm_plot()
 
         if self.send_serial:
-            self.serial.write(int(self.processor.bpm))
+            self.serial.write(struct.pack("B", int(self.processor.bpm)))
 
         if self.send_udp:
             self.sock.sendto(str(self.processor.bpm), self.udp)
