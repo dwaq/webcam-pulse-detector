@@ -27,6 +27,7 @@ class getPulseApp(object):
         baud = args.baud
         self.send_serial = False
         self.send_udp = False
+        self.serial_delay_counter = 0
         if serial:
             self.send_serial = True
             if not baud:
@@ -190,7 +191,16 @@ class getPulseApp(object):
             self.make_bpm_plot()
 
         if self.send_serial:
-            self.serial.write(struct.pack("B", int(self.processor.bpm)))
+            # only send the pulse rate when counter is zero
+            if (self.serial_delay_counter == 0):
+                # sending the pulse as an one-byte integer
+                self.serial.write(struct.pack("B", int(self.processor.bpm)))
+            # count up
+            self.serial_delay_counter += 1
+            # reset at 25
+            # (seems to be enough delay for the Digispark to handle the datastream)
+            if (self.serial_delay_counter == 25):
+                self.serial_delay_counter = 0
 
         if self.send_udp:
             self.sock.sendto(str(self.processor.bpm), self.udp)
